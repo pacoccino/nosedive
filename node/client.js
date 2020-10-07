@@ -1,7 +1,7 @@
 let { connect } = require('lotion')
 const { ethers } = require('ethers');
 
-let GCI = 'd6e0f0d0d9ba6d54a7e680f950ddee3504775ae42a89cb1279974e67b3db14f3'
+let GCI = '83843d3b17c36d935df6d630dc2db8e4a31a101c9617f6ff67d4223b4ff7169b'
 
 const wallet = ethers.Wallet.createRandom();
 const wallet_bis = ethers.Wallet.createRandom();

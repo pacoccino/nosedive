@@ -8,7 +8,9 @@ function getAverageRating(ratings) {
 }
 
 const initialState = {
-  users: [],
+  users: {
+    '0x27EA3474c96145887d3914099ce74B4b3Fbf08a9': { rating: 0, ratings: [] },
+  },
 };
 
 function createUser(state, address, ratingData = []) {

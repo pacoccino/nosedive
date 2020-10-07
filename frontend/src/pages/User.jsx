@@ -97,7 +97,7 @@ export default function UserPage({}) {
           {user.ratings.length > 0 ?
             <Box my={5}>
               <Typography variant="h6">
-                Users who have rated this user:
+                Ratings
               </Typography>
               <TableContainer component={Paper}>
                 <Table aria-label="simple table">

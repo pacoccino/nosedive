@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 let { connect } = require('lotion');
 
 const NodeClientContext = React.createContext();
-const GCI = 'd6e0f0d0d9ba6d54a7e680f950ddee3504775ae42a89cb1279974e67b3db14f3'
+const GCI = '83843d3b17c36d935df6d630dc2db8e4a31a101c9617f6ff67d4223b4ff7169b'
 
 function getWallet() {
   const privateKey = localStorage.getItem('privateKey');
@@ -18,7 +18,7 @@ function getWallet() {
 
 const NodeClientProvider = (props) => {
   const [users, setUsers] = useState({});
-  const [wallet] = useState(getWallet);
+  const [wallet, setWallet] = useState(getWallet);
   const [node, setNode] = useState(null);
 
   useEffect(() => {
@@ -73,11 +73,17 @@ const NodeClientProvider = (props) => {
 
   };
 
+  async function logout() {
+    localStorage.removeItem('privateKey');
+    setWallet(getWallet());
+  }
+
   const providerValues = {
     users,
     sendRating,
     node,
     myAddress: wallet.address,
+    logout
   };
 
   return (

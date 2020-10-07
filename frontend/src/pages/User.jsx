@@ -44,7 +44,7 @@ export default function UserPage({}) {
 
   async function rate(rating) {
     setSendingRating(true);
-    await sendRating(address, rating)
+    await sendRating(address, rating);
     setSendingRating(false);
   }
 

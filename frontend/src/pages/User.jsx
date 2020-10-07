@@ -92,6 +92,13 @@ export default function UserPage({}) {
                   </CardActions>
               )
             }
+
+            <CardActions>
+              <Typography gutterBottom variant="body1" component="h2" className={classes.userTitle}>
+                Give a note
+              </Typography>
+              <Rating name="give-rating" precision={1} onChange={(_, newValue) => rate(newValue)}/>
+            </CardActions>
           </Card>
 
           {user.ratings.length > 0 ?

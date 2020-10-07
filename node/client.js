@@ -1,7 +1,7 @@
 let { connect } = require('lotion')
 const { ethers } = require('ethers');
 
-let GCI = '83843d3b17c36d935df6d630dc2db8e4a31a101c9617f6ff67d4223b4ff7169b'
+let GCI = 'dfd35d58a6987b83818ee7ba23998418612138f979704171e0839fe368aa9027'
 
 const wallet = ethers.Wallet.createRandom();
 const wallet_bis = ethers.Wallet.createRandom();
@@ -15,7 +15,7 @@ async function app() {
   const claim = {
     raterUser: wallet.address,
     ratedUser: wallet_bis.address,
-    rating: 2,
+    rating: 9,
     // timestamp: Date.now,
   };
 

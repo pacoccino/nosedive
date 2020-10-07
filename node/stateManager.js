@@ -19,22 +19,26 @@ function createUser(state, address, ratingData = []) {
     ratings: ratingData,
   };
 }
-function updateUser(state, address, ratingData = null) {
-  if(state.users[address]) {
-    if(!ratingData) throw Error('nothing to update');
 
-    const oldRatings = state.users[address].ratings;
-    const newRatings = oldRatings.concat({
-      raterUser: ratingData.raterUser,
-      rating: ratingData.rating,
-    });
+function addRating(state, ratedUser, raterUser, rating) {
+  if(!Number.isInteger(rating) || rating < 0 || rating > 5) {
+    throw new Error('Invalid rating');
+  }
 
-    state.users[address].ratings = newRatings;
-    state.users[address].rating = getAverageRating(newRatings);
+  if(state.users[ratedUser]) {
+    const oldRatings = state.users[ratedUser].ratings;
+    const existingRating = oldRatings.find(r => r.raterUser === raterUser);
+    if(existingRating) {
+      throw new Error('You already rated that user');
+    }
+    const newRatings = oldRatings.concat({ raterUser, rating });
+
+    state.users[ratedUser].ratings = newRatings;
+    state.users[ratedUser].rating = getAverageRating(newRatings);
   } else {
-    state.users[address] = {
-      rating: ratingData ? ratingData.rating : 0,
-      ratings: ratingData ? [ratingData] : [],
+    state.users[ratedUser] = {
+      rating: rating,
+      ratings: [{rating, raterUser}],
     };
   }
 }
@@ -57,7 +61,7 @@ function transactionHandler(state, tx) {
 
   if (!state.users[raterUser]) createUser(state, raterUser);
 
-  updateUser(state, ratedUser, { raterUser, rating })
+  addRating(state, ratedUser, raterUser, rating);
 }
 
 module.exports = { initialState, transactionHandler };

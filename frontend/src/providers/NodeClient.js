@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 let { connect } = require('lotion');
 
 const NodeClientContext = React.createContext();
-const GCI = '83843d3b17c36d935df6d630dc2db8e4a31a101c9617f6ff67d4223b4ff7169b'
+const GCI = 'b14cd6804a5563cd13cb79c6152ed8c6b17f0e9b4c5fccd48a66062a2eae69f7'
 
 function getWallet() {
   const privateKey = localStorage.getItem('privateKey');

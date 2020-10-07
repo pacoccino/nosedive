@@ -6,16 +6,12 @@ async function main() {
   let app = lotion({
     initialState,
     p2pPort: process.env.P2P_PORT || 26611,
-    rpcPort: process.env.RPC_PORT || 26612
+    rpcPort: process.env.RPC_PORT || 26612,
   });
 
   app.use(transactionHandler);
 
-  app.useBlock((block)=> {
-    console.log(block);
-  });
-
-  let { GCI } = await app.start()
+  let { GCI } = await app.start();
   console.log('Node started');
   console.log('GCI:', GCI);
 }

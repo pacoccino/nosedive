@@ -35,7 +35,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function UserPage({}) {
+export default function UserPage() {
   const classes = useStyles();
   const history = useHistory();
   const { address } = useParams();

@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
 let { connect } = require('lotion');
 
 const NodeClientContext = React.createContext();
-const GCI = '6668f4ca32e91b167ae7674037c8dcf60340f5724fbf2d01b7af21542f344fb0'
+const GCI = process.env.REACT_APP_GCI || '6668f4ca32e91b167ae7674037c8dcf60340f5724fbf2d01b7af21542f344fb0'
 
 function getWallet() {
   const privateKey = localStorage.getItem('privateKey');

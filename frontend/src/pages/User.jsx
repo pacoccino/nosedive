@@ -21,6 +21,8 @@ import TableCell from '@material-ui/core/TableCell/TableCell';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 
+import moment from 'moment';
+
 const useStyles = makeStyles({
   root: {
     maxWidth: 345,
@@ -92,13 +94,6 @@ export default function UserPage({}) {
                   </CardActions>
               )
             }
-
-            <CardActions>
-              <Typography gutterBottom variant="body1" component="h2" className={classes.userTitle}>
-                Give a note
-              </Typography>
-              <Rating name="give-rating" precision={1} onChange={(_, newValue) => rate(newValue)}/>
-            </CardActions>
           </Card>
 
           {user.ratings.length > 0 ?
@@ -111,6 +106,7 @@ export default function UserPage({}) {
                   <TableHead>
                     <TableRow>
                       <TableCell>User</TableCell>
+                      <TableCell>Dates</TableCell>
                       <TableCell align="right">Rating given</TableCell>
                     </TableRow>
                   </TableHead>
@@ -120,6 +116,9 @@ export default function UserPage({}) {
                       <TableRow key={address} hover onClick={() => history.push(`/users/${row.raterUser}`)} >
                         <TableCell component="th" scope="row">
                           {row.raterUser}
+                        </TableCell>
+                        <TableCell scope="row">
+                          {moment.unix(row.time).fromNow()}
                         </TableCell>
                         <TableCell align="right">
                           <Rating name="user-rating" readOnly defaultValue={row.rating} precision={0.5}/>

@@ -13,14 +13,14 @@ const initialState = {
   },
 };
 
-function createUser(state, address, ratingData = []) {
+function createUser(state, address) {
   state.users[address] = {
     rating: 0,
-    ratings: ratingData,
+    ratings: [],
   };
 }
 
-function addRating(state, ratedUser, raterUser, rating) {
+function addRating(state, ratedUser, raterUser, rating, time) {
   if(!Number.isInteger(rating) || rating < 0 || rating > 5) {
     throw new Error('Invalid rating');
   }
@@ -31,14 +31,14 @@ function addRating(state, ratedUser, raterUser, rating) {
     if(existingRating) {
       throw new Error('You already rated that user');
     }
-    const newRatings = oldRatings.concat({ raterUser, rating });
+    const newRatings = oldRatings.concat({ raterUser, rating, time });
 
     state.users[ratedUser].ratings = newRatings;
     state.users[ratedUser].rating = getAverageRating(newRatings);
   } else {
     state.users[ratedUser] = {
       rating: rating,
-      ratings: [{rating, raterUser}],
+      ratings: [{ rating, raterUser, time }],
     };
   }
 }
@@ -51,7 +51,7 @@ function addRating(state, ratedUser, raterUser, rating) {
  * @param tx.raterUser {string} user who rates
  * @param tx.rating {number} rating given to the rated user by the rater user
  */
-function transactionHandler(state, tx) {
+function transactionHandler(state, tx, context) {
   const signerAddress = ethers.utils.verifyMessage(tx.rawClaim, tx.proof);
   const claim = JSON.parse(tx.rawClaim);
   const { ratedUser, raterUser, rating } = claim;
@@ -61,7 +61,7 @@ function transactionHandler(state, tx) {
 
   if (!state.users[raterUser]) createUser(state, raterUser);
 
-  addRating(state, ratedUser, raterUser, rating);
+  addRating(state, ratedUser, raterUser, rating, context.time);
 }
 
 module.exports = { initialState, transactionHandler };

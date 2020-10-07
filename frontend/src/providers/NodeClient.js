@@ -51,7 +51,12 @@ const NodeClientProvider = (props) => {
 
   };
 
-  const providerValues = { users, sendRating, node };
+  const providerValues = {
+    users,
+    sendRating,
+    node,
+    myAddress: wallet.address,
+  };
 
   return (
     <NodeClientContext.Provider value={providerValues}>

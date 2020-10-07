@@ -5,36 +5,51 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
+  Link as RouterLink,
 } from "react-router-dom";
 
 import Container from '@material-ui/core/Container';
 import AppBar from '@material-ui/core/AppBar/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
+import { NodeClientProvider } from './providers/NodeClient';
+
+import Users from './pages/Users'
+import User from './pages/User'
 
 function App() {
   return (
-    <div className="App">
+    <Router>
       <CssBaseline />
 
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6">
-            Nosedive
-          </Typography>
+          <Link component={RouterLink} to="/" color="inherit">
+            <Typography variant="h6">
+              Users rating
+            </Typography>
+          </Link>
         </Toolbar>
       </AppBar>
 
-      <Container maxWidth="md">
-        <Router>
+      <NodeClientProvider>
+        <Container maxWidth="md">
           <Switch>
+            <Route exact path="/users">
+              <Users />
+            </Route>
+            <Route path="/users/:address">
+              <User />
+            </Route>
             <Route path="*">
-              <div>hello</div>
+              <Redirect to="/users"/>
             </Route>
           </Switch>
-        </Router>
-      </Container>
-    </div>
+        </Container>
+      </NodeClientProvider>
+    </Router>
   );
 }
 

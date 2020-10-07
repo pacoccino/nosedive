@@ -8,38 +8,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Rating from '@material-ui/lab/Rating';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { NodeClientContext } from "../providers/NodeClient";
 
-import { ethers } from 'ethers';
-
-const wallet = ethers.Wallet.createRandom();
-const wallet_bis = ethers.Wallet.createRandom();
-
 export default function UsersPage() {
-  const { users, sendTransaction } = useContext(NodeClientContext);
-
-  async function rate() {
-    const claim = {
-      user: wallet_bis.address,
-      rater: wallet.address,
-      rating: 2,
-      // timestamp: Date.now,
-    };
-
-    const rawClaim = JSON.stringify(claim);
-    const proof = await wallet.signMessage(rawClaim);
-
-    const tx = {
-      rawClaim,
-      proof,
-    };
-
-    let result = await sendTransaction(tx)
-    console.log(result)
-
-  }
+  const history = useHistory();
+  const { users } = useContext(NodeClientContext);
 
   return (
     <Box my={5}>
@@ -53,7 +28,7 @@ export default function UsersPage() {
           </TableHead>
           <TableBody>
             {Object.entries(users).map(([address, userData]) => (
-              <TableRow key={address} component={Link} to={`/users/${address}`} >
+              <TableRow key={address} hover onClick={() => history.push(`/users/${address}`)} >
                 <TableCell component="th" scope="row">
                   {address}
                 </TableCell>
@@ -65,7 +40,6 @@ export default function UsersPage() {
           </TableBody>
         </Table>
       </TableContainer>
-      <button onClick={rate}>rate</button>
     </Box>
   )
 }

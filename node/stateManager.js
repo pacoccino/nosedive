@@ -23,7 +23,7 @@ function updateUser(state, address, ratingData = null) {
 
     const oldRatings = state.users[address].ratings;
     const newRatings = oldRatings.concat({
-      rater: ratingData.raterUser,
+      raterUser: ratingData.raterUser,
       rating: ratingData.rating,
     });
 

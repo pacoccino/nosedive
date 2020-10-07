@@ -10,7 +10,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Rating from '@material-ui/lab/Rating';
-import { Link, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { NodeClientContext } from "../providers/NodeClient";
 
@@ -36,11 +36,14 @@ const useStyles = makeStyles({
 
 export default function UserPage({}) {
   const classes = useStyles();
-  let { address } = useParams();
-  const { users } = useContext(NodeClientContext);
+  const history = useHistory();
+  const { address } = useParams();
+  const { users, sendRating } = useContext(NodeClientContext);
   const user = users[address];
 
-  console.log(user);
+  function rate() {
+    sendRating(address, 3)
+  }
   return (
     <Box display="flex" justifyContent="center" my={10}>
       {!user ?
@@ -62,7 +65,7 @@ export default function UserPage({}) {
               </CardContent>
             </CardActionArea>
             <CardActions>
-              <Button size="small" color="primary">
+              <Button size="small" color="primary" onClick={rate}>
                 Rate
               </Button>
             </CardActions>
@@ -84,7 +87,7 @@ export default function UserPage({}) {
 
                 <TableBody>
                   {user.ratings.map((row) => (
-                    <TableRow key={address} component={Link} to={`/users/${row.raterUser}`}>
+                    <TableRow key={address} hover onClick={() => history.push(`/users/${row.raterUser}`)} >
                       <TableCell component="th" scope="row">
                         {row.raterUser}
                       </TableCell>

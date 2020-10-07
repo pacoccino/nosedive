@@ -11,26 +11,51 @@ const initialState = {
   users: [],
 };
 
+function createUser(state, address, ratingData = []) {
+  state.users[address] = {
+    rating: 0,
+    ratings: ratingData,
+  };
+}
+function updateUser(state, address, ratingData = null) {
+  if(state.users[address]) {
+    if(!ratingData) throw Error('nothing to update');
+
+    const oldRatings = state.users[address].ratings;
+    const newRatings = oldRatings.concat({
+      rater: ratingData.raterUser,
+      rating: ratingData.rating,
+    });
+
+    state.users[address].ratings = newRatings;
+    state.users[address].rating = getAverageRating(newRatings);
+  } else {
+    state.users[address] = {
+      rating: ratingData ? ratingData.rating : 0,
+      ratings: ratingData ? [ratingData] : [],
+    };
+  }
+}
+
+/**
+ *
+ * @param state
+ * @param tx{Object} transaction
+ * @param tx.ratedUser {string} user who is rated
+ * @param tx.raterUser {string} user who rates
+ * @param tx.rating {number} rating given to the rated user by the rater user
+ */
 function transactionHandler(state, tx) {
   const signerAddress = ethers.utils.verifyMessage(tx.rawClaim, tx.proof);
   const claim = JSON.parse(tx.rawClaim);
-  const {user, rater, rating} = claim;
+  const { ratedUser, raterUser, rating } = claim;
 
-  if (signerAddress !== rater) throw new Error('Invalid signature');
-  if (!ethers.utils.isAddress(user)) throw new Error('Invalid target user');
+  if (signerAddress !== raterUser) throw new Error('Invalid signature');
+  if (!ethers.utils.isAddress(ratedUser)) throw new Error('Invalid target user');
 
-  if (!state.users[user]) {
-    state.users[user] = {
-      rating,
-      ratings: [{rater, rating}],
-    }
-  } else {
-    const oldRatings = state.users[user].ratings;
-    const newRatings = oldRatings.concat({rater, rating});
+  if (!state.users[raterUser]) createUser(state, raterUser);
 
-    state.users[user].ratings = newRatings;
-    state.users[user].rating = getAverageRating(newRatings);
-  }
+  updateUser(state, ratedUser, { raterUser, rating })
 }
 
 module.exports = { initialState, transactionHandler };

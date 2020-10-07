@@ -1,0 +1,12 @@
+version: "3.8"
+
+services:
+  node:
+    build: ./node
+    command: npm run start:node
+    ports:
+      - ${P2P_PORT-26611}:26611
+      - ${RPC_PORT-26612}:26612
+    environment:
+      P2P_PORT: 26611
+      RPC_PORT: 26612
